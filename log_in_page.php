@@ -7,15 +7,15 @@
     include_once "check_login_cookies.php";
 
     if (!isset($_SESSION['user_id'])) {
-        check_cookies($database_conn);
+        check_cookies($database_conn); // Checking if a user has remembered their account
     }
 
-    if (!isset($_COOKIE['theme'])) {
+    if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
         $_COOKIE['theme'] = "light";
     }
 
     if (!isset($_SESSION['log_in_error'])) {
-        $_SESSION['log_in_error'] = "";
+        $_SESSION['log_in_error'] = ""; // Setting the log in error to nothing before we add its values
     }
 
     if (isset($_SESSION['user_id'])) {
@@ -113,11 +113,11 @@
         </form>
 
         <div class="form_link">
-            <a href="sign_up_page.php" class="text_decoration_none">Don't have an account? <u>Sign up here</u></a>
+            <a href="sign_up_page.php" class="text_decoration_none">Don't have an account? <u>Sign up here</u></a> <!-- Link to sign up page -->
         </div>
     </section>
 
-    <?php include_once "components/footer.php"; ?>
+    <?php include_once "components/footer.php"; ?> <!-- Including the footer -->
 
     <script src="theme.js"></script>
     <script src="remember_me.js"></script>
