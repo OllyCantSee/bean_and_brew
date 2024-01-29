@@ -1,34 +1,39 @@
 <?php
 
-    session_start();
+session_start();
 
-    include_once "database_conn.php";
-    include_once "validation_functions/validation.php";
+include_once "database_conn.php";
+include_once "validation_functions/validation.php";
 
-    if (!isset($_COOKIE['theme'])) {
-        $_COOKIE['theme'] = "light";
-    }
-
-    if (isset($_POST['restaurant'])) {
-        $restauraunt_name = $_POST['restaurant'];
-        $query = "SELECT * FROM restaurant_seating WHERE restaurant_name = $restaurant_name";
-        $result = mysqli_query($database_conn, $query);
-        $result_array = $result->fetch_array();
-        $seats = $result_array['restaurant_seats'];
-    }
-
+if (!isset($_COOKIE['theme'])) {
+    $_COOKIE['theme'] = "light";
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <title>Book a Table | Bean and Brew</title> <!-- This is the title of the page -->
 </head>
-<body <?php if ($_COOKIE['theme'] == "dark" && isset($_SESSION['user_id'])) {echo "class='dark'";} ?>>
-    
+
+<script>
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'your_php_script.php?restaurant=' + selectedRestaurant, true);
+        xhr.send();
+        var text_to_insert = xhr.responseText;
+
+</script>
+
+<body <?php if ($_COOKIE['theme'] == "dark" && isset($_SESSION['user_id'])) {
+    echo "class='dark'";
+} ?>>
+
     <?php include_once "components/top_navigation_bar.php"; ?>
 
     <?php include_once "components/basket_component.php"; ?>
@@ -42,9 +47,20 @@
             <div class="column_one">
                 <div class="column_one_top_box">
                     <h2 class="top_box_title">Seats available</h2>
-                    <h1 class="top_box_main font_size_80">20</h1>
+                    <h1 class="top_box_main font_size_80">
+                        <?php
+                        if (isset($_POST['restauraunt'])) {
+                            $restauraunt_name = $_POST['restaurant'];
+                            $query = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restauraunt_name'";
+                            $result = mysqli_query($database_conn, $query);
+                            $result_array = $result->fetch_array();
+                            $seats = $result_array['restaurant_seats'];
+                            echo $seats;
+                        }
+                        ?>
+                    </h1>
                 </div>
-                
+
                 <div class="column_one_bottom_box">
                     <div class="bottom_box_title_container">
                         <h1 class="bottom_box_title">Recommended for you</h1>
@@ -58,10 +74,10 @@
                         <h1 class="checkout_title">Where?</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <select name="restaurant" id="" class="checkout_input_long">
-                            <option value="">Leeds</option>
-                            <option value="">Knaresborough</option>
-                            <option value="">Harrogate</option>
+                        <select name="restaurant" id="restaurant" class="checkout_input_long">
+                            <option value="Leeds">Leeds</option>
+                            <option value="Knaresborough">Knaresborough</option>
+                            <option value="Harrogate">Harrogate</option>
                         </select>
                     </form>
                 </div>
@@ -71,10 +87,10 @@
                         <h1 class="checkout_title">General Info</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <input type="text" placeholder="How many?"
-                        class="checkout_input_long" name="number_of_people" maxlength="40">
-                        <input type="text" placeholder="Any allergies?"
-                        class="checkout_input_long" name="alergies_bool" maxlength="60">
+                        <input type="text" placeholder="How many?" class="checkout_input_long" name="number_of_people"
+                            maxlength="40">
+                        <input type="text" placeholder="Any allergies?" class="checkout_input_long" name="alergies_bool"
+                            maxlength="60">
                     </form>
                 </div>
 
@@ -83,8 +99,8 @@
                         <h1 class="checkout_title">When?</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <input type="date" placeholder="Choose a date..."
-                        class="checkout_input_long" name="number_of_people" maxlength="40">
+                        <input type="date" placeholder="Choose a date..." class="checkout_input_long"
+                            name="number_of_people" maxlength="40">
                         <select name="time_of_booking" id="" class="checkout_input_long">
                             <option value="">Choose a time</option>
                             <option value="09.00">09.00</option>
@@ -97,7 +113,7 @@
                             <option value="13.00">13.00</option>
                             <option value="14.00">14.00</option>
                             <option value="14.30">14.30</option>
-                            <option value="15.00">15.00</option>
+                            <option value="15.00">15.00 if men</option>
                             <option value="15.30">15.30</option>
                             <option value="16.00">16.00</option>
                             <option value="16.30">16.30</option>
@@ -109,8 +125,8 @@
                             <option value="19.30">19.30</option>
                             <option value="20.00">20.00</option>
                         </select>
-                        <input type="submit" class="change_value_button"
-                        name="submit_password_change" value="Submit">
+                        <input method="POST" type="submit" class="change_value_button" name="submit_password_change"
+                            value="Submit">
                     </form>
                 </div>
             </div>
@@ -127,4 +143,5 @@
     <script src="burger.js"></script>
 
 </body>
+
 </html>
