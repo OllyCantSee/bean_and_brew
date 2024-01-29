@@ -9,6 +9,14 @@
         $_COOKIE['theme'] = "light";
     }
 
+    if (isset($_POST['restaurant'])) {
+        $restauraunt_name = $_POST['restaurant'];
+        $query = "SELECT * FROM restaurant_seating WHERE restaurant_name = $restaurant_name";
+        $result = mysqli_query($database_conn, $query);
+        $result_array = $result->fetch_array();
+        $seats = $result_array['restaurant_seats'];
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +25,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
-    <title>Book a table | Bean and Brew</title> <!-- This is the title of the page -->
+    <title>Book a Table | Bean and Brew</title> <!-- This is the title of the page -->
 </head>
 <body <?php if ($_COOKIE['theme'] == "dark" && isset($_SESSION['user_id'])) {echo "class='dark'";} ?>>
     
@@ -34,7 +42,7 @@
             <div class="column_one">
                 <div class="column_one_top_box">
                     <h2 class="top_box_title">Seats available</h2>
-                    <h1 class="top_box_main font_size_80">27</h1>
+                    <h1 class="top_box_main font_size_80">20</h1>
                 </div>
                 
                 <div class="column_one_bottom_box">
@@ -53,7 +61,7 @@
                         <select name="restaurant" id="" class="checkout_input_long">
                             <option value="">Leeds</option>
                             <option value="">Knaresborough</option>
-                            <option value=""></option>
+                            <option value="">Harrogate</option>
                         </select>
                     </form>
                 </div>
