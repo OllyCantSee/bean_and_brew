@@ -22,11 +22,22 @@ if (!isset($_COOKIE['theme'])) {
 
 <script>
 
+function get_seats(selectedRestaurant) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'get_seats.php?restaurant=' + selectedRestaurant, true);
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'your_php_script.php?restaurant=' + selectedRestaurant, true);
-        xhr.send();
-        var text_to_insert = xhr.responseText;
+    xhr.onreadystatechange = function () {
+        console.log(xhr.readyState, xhr.status);
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+            document.getElementById('number_of_seats').innerText = xhr.responseText;
+        }
+    };
+
+
+    xhr.send();
+}
+
 
 </script>
 
@@ -47,17 +58,7 @@ if (!isset($_COOKIE['theme'])) {
             <div class="column_one">
                 <div class="column_one_top_box">
                     <h2 class="top_box_title">Seats available</h2>
-                    <h1 class="top_box_main font_size_80">
-                        <?php
-                        if (isset($_POST['restauraunt'])) {
-                            $restauraunt_name = $_POST['restaurant'];
-                            $query = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restauraunt_name'";
-                            $result = mysqli_query($database_conn, $query);
-                            $result_array = $result->fetch_array();
-                            $seats = $result_array['restaurant_seats'];
-                            echo $seats;
-                        }
-                        ?>
+                    <h1 class="top_box_main font_size_80" id="number_of_seats">
                     </h1>
                 </div>
 
@@ -74,7 +75,7 @@ if (!isset($_COOKIE['theme'])) {
                         <h1 class="checkout_title">Where?</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <select name="restaurant" id="restaurant" class="checkout_input_long">
+                        <select name="restaurant" id="restaurant" class="checkout_input_long" onchange="get_seats(this.value)">
                             <option value="Leeds">Leeds</option>
                             <option value="Knaresborough">Knaresborough</option>
                             <option value="Harrogate">Harrogate</option>
