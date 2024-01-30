@@ -1525,3 +1525,9 @@ body.dark input[type="date"] {
 option {
     background-color: var(--nav-background)
 }
+
+.display_flex_column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

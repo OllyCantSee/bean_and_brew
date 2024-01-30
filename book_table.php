@@ -14,6 +14,42 @@ if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
     $_COOKIE['theme'] = "light";
 }
 
+if (isset($_POST['submit_booking'])) {
+    $restaurant_location = $_POST['restaurant'];
+    $number_of_guests = $_POST['number_of_guests'];
+    $alergies_boolean = $_POST['alergies_boolean'];
+    $date_of_booking = $_POST['date_of_booking'];
+    $time_of_booking = $_POST['time_of_booking'];
+
+    if (empty($restaurant_location) || empty($number_of_guests)
+    || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking) || ($restaurant_location == "") || ($number_of_guests  == "")
+    || $alergies_boolean  == "" || $date_of_booking  == "" || ($time_of_booking  == "")) {
+
+    } else {
+        $query1 = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restaurant_location'";
+        $result = mysqli_query($database_conn, $query1);
+        $result_array = $result->fetch_array();
+        $number_of_available_seats = $result_array['restaurant_seats'];
+
+        $total_seats_after_booking = (intval($number_of_available_seats)-intval($number_of_guests));
+
+        if ($total_seats_after_booking < 0) {
+            $_SESSION['booking_error'] = "Sorry, there is not enough room for that number of guests";
+        } else {
+            $query2 = "UPDATE restaurant_seating SET restaurant_seats = $total_seats_after_booking
+            WHERE restaurant_name = '$restaurant_location'";
+            mysqli_query($database_conn, $query2);
+    
+            $date = date_create($date_of_booking);
+            $query3 = "INSERT INTO users_booking(number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
+            VALUES($number_of_guests, $alergies_boolean, $date_of_booking, $time_of_booking)";
+            mysqli_query($database_conn, $query3);
+        }
+    }
+
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -28,15 +64,22 @@ if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
 
 <script>
 
+    get_seats();
+
 function get_seats(selectedRestaurant) {
+
+    if (document.getElementById('number_of_seats') == null || document.getElementById('number_of_seats') == "") {
+        selectedRestaurant = "Leeds";
+    }
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'get_seats.php?restaurant=' + selectedRestaurant, true);
 
     xhr.onreadystatechange = function () {
-        console.log(xhr.readyState, xhr.status);
         if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log(xhr.responseText);
             document.getElementById('number_of_seats').innerText = xhr.responseText;
+            if (xhr.responseText == "0") {
+                document.getElementById('number_of_seats').innerText = "None"
+            }
         }
     };
 
@@ -67,6 +110,7 @@ function get_seats(selectedRestaurant) {
                 <div class="column_one_top_box">
                     <h2 class="top_box_title">Seats available</h2>
                     <h1 class="top_box_main font_size_80" id="number_of_seats">
+                        
                     </h1>
                 </div>
 
@@ -83,20 +127,20 @@ function get_seats(selectedRestaurant) {
                         <h1 class="checkout_title">Where?</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <select name="restaurant" id="restaurant" class="checkout_input_long" onchange="get_seats(this.value)">
-                            <option value="Leeds">Leeds</option>
+                        <select name="restaurant" id="restaurant"
+                        class="checkout_input_long" onchange="get_seats(this.value)">
+                            <option value="Leeds" selected="selected">Leeds</option>
                             <option value="Knaresborough">Knaresborough</option>
                             <option value="Harrogate">Harrogate</option>
                         </select>
-                    </form>
                 </div>
 
                 <div class="personal_info_checkout">
                     <div class="item_title_container">
                         <h1 class="checkout_title">General Info</h1>
                     </div>
-                    <form method="POST" class="checkout_form">
-                        <select name="" id="" class="checkout_input_long">
+                    <div class="display_flex_column">
+                        <select name="number_of_guests" id="" class="checkout_input_long">
                             <option value="">Select the number of guests...</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -109,21 +153,21 @@ function get_seats(selectedRestaurant) {
                             <option value="9">9</option>
                             <option value="10">10</option>
                         </select>
-                        <select name="" id="" class="checkout_input_long">
-                            <option value="Yes">Any allergies?</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
+                        <select name="alergies_boolean" id="" class="checkout_input_long">
+                            <option value="">Any allergies?</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
                         </select>
-                    </form>
+                        </div>
                 </div>
 
                 <div class="personal_info_checkout">
                     <div class="item_title_container">
                         <h1 class="checkout_title">When?</h1>
                     </div>
-                    <form method="POST" class="checkout_form">
+                    <div class="display_flex_column">
                         <input type="date" placeholder="Choose a date..." class="checkout_input_long"
-                            name="number_of_people" maxlength="40">
+                            name="date_of_booking" maxlength="40">
                         <select name="time_of_booking" id="" class="checkout_input_long">
                             <option value="">Choose a time</option>
                             <option value="09.00">09.00</option>
@@ -148,9 +192,11 @@ function get_seats(selectedRestaurant) {
                             <option value="19.30">19.30</option>
                             <option value="20.00">20.00</option>
                         </select>
-                        <input method="POST" type="submit" class="change_value_button" name="submit_password_change"
+                        <input method="POST" type="submit" class="change_value_button" name="submit_booking"
                             value="Submit">
-                    </form>
+                        </div>
+                        
+                </form>
                 </div>
             </div>
 
