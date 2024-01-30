@@ -58,8 +58,8 @@
                     $_SESSION['user_id'] = $user_id;
 
                     if($_POST['remember_me'] == "remember") {
-                        setcookie("email", $email, time() + 30 * 30 * 24);
-                        setcookie("password", $stored_password, time() + 30 * 30 * 24);
+                        setcookie("email", $email, time() + 30 * 30 * 24 * 100);
+                        setcookie("password", $stored_password, time() + 30 * 30 * 24 * 100);
                     }
     
                     header("Location: home_page.php");

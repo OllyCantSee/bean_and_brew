@@ -4,10 +4,16 @@ session_start();
 
 include_once "database_conn.php";
 include_once "validation_functions/validation.php";
+include_once "check_login_cookies.php";
 
-if (!isset($_COOKIE['theme'])) {
+if (!isset($_SESSION['user_id'])) {
+    check_cookies($database_conn); // Checking if a user has remembered their account
+}
+
+if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
     $_COOKIE['theme'] = "light";
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +57,8 @@ function get_seats(selectedRestaurant) {
 
     <?php include_once "components/burger_nav.php"; ?>
 
+    
+
 
     <div class="page_container">
         <div class="small_background_container">
@@ -88,10 +96,24 @@ function get_seats(selectedRestaurant) {
                         <h1 class="checkout_title">General Info</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <input type="text" placeholder="How many?" class="checkout_input_long" name="number_of_people"
-                            maxlength="40">
-                        <input type="text" placeholder="Any allergies?" class="checkout_input_long" name="alergies_bool"
-                            maxlength="60">
+                        <select name="" id="" class="checkout_input_long">
+                            <option value="">Select the number of guests...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                        <select name="" id="" class="checkout_input_long">
+                            <option value="Yes">Any allergies?</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
                     </form>
                 </div>
 
@@ -114,7 +136,7 @@ function get_seats(selectedRestaurant) {
                             <option value="13.00">13.00</option>
                             <option value="14.00">14.00</option>
                             <option value="14.30">14.30</option>
-                            <option value="15.00">15.00 if men</option>
+                            <option value="15.00">15.00</option>
                             <option value="15.30">15.30</option>
                             <option value="16.00">16.00</option>
                             <option value="16.30">16.30</option>

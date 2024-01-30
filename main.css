@@ -1521,3 +1521,7 @@ body.dark input[type="date"] {
 .lighter_text {
     color: #434343;
 }
+
+option {
+    background-color: var(--nav-background)
+}
