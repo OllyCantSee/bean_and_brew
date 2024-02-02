@@ -22,9 +22,8 @@ if (isset($_POST['submit_booking'])) {
     $time_of_booking = $_POST['time_of_booking'];
 
     if (empty($restaurant_location) || empty($number_of_guests)
-    || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking) || ($restaurant_location == "") || ($number_of_guests  == "")
-    || $alergies_boolean  == "" || $date_of_booking  == "" || ($time_of_booking  == "")) {
-
+    || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking)) {
+            $_SESSION['book_table_error'] = "Value is empty";
     } else {
         $query1 = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restaurant_location'";
         $result = mysqli_query($database_conn, $query1);
@@ -41,8 +40,8 @@ if (isset($_POST['submit_booking'])) {
             mysqli_query($database_conn, $query2);
     
             $date = date_create($date_of_booking);
-            $query3 = "INSERT INTO users_booking(number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
-            VALUES($number_of_guests, $alergies_boolean, $date_of_booking, $time_of_booking)";
+            $query3 = "INSERT INTO users_booking(booking_location,number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
+            VALUES('$restaurant_location', $number_of_guests, $alergies_boolean, $date_of_booking, $time_of_booking)";
             mysqli_query($database_conn, $query3);
         }
     }
@@ -203,6 +202,14 @@ function get_seats(selectedRestaurant) {
         </div>
     </div>
 
+    <div class="page_error" id="page_error">
+        <div class="page_error_content">
+            <h1 class="page_error_title">Error</h1>
+            <?php echo $_SESSION['book_table_error']; ?>
+            <a href="" class="close_error" id="close_error">Close Error</a>
+        </div>
+    </div>
+
 
     <?php include_once "components/footer.php"; ?>
 
@@ -210,6 +217,7 @@ function get_seats(selectedRestaurant) {
 
     <script src="shopping_list.js"></script>
     <script src="burger.js"></script>
+    <script src="error_message.js"></script>
 
 </body>
 

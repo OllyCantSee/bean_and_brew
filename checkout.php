@@ -113,7 +113,7 @@
 
                         ?>
                     </h1>
-                <h1 class="vat"><?php echo "(20%) VAT applied: £" . sprintf("%.2f", $total_price * 0.2); ?></h1>
+                <h1 class="vat"><?php echo "+ (20%) VAT applied: £" . sprintf("%.2f", $total_price * 0.2); ?></h1>
                 </div>
 
                 <div class="column_one_bottom_box">
@@ -177,7 +177,7 @@
                         <h1 class="checkout_title">Payment Details</h1>
                     </div>
                     <div class="payment_details">
-                        <input type="text" placeholder="Card number..." class="checkout_input_long" maxlength="19">
+                        <input type="text" placeholder="Card number..." class="checkout_input_long" maxlength="19" name="card_number">
                         <input type="text" placeholder="Name on card..." class="checkout_input_long" maxlength="60">
                         <div class="payment_sub_section">
                             <input type="text" placeholder="Expiration Date..." class="checkout_input_long">
