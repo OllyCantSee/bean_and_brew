@@ -178,10 +178,10 @@
                     </div>
                     <div class="payment_details">
                         <input type="text" placeholder="Card number..." class="checkout_input_long" maxlength="19" name="card_number">
-                        <input type="text" placeholder="Name on card..." class="checkout_input_long" maxlength="60">
+                        <input type="text" placeholder="Name on card..." class="checkout_input_long" maxlength="60" name="card_name">
                         <div class="payment_sub_section">
-                            <input type="text" placeholder="Expiration Date..." class="checkout_input_long">
-                            <input type="text" placeholder="Security Code..."
+                            <input type="text" placeholder="Expiration Date..." class="checkout_input_long" name="expiration_date">
+                            <input type="text" placeholder="Security Code..." name="security_code"
                             class="checkout_input_long" maxlength="3">
                         </div>
                     </div>
