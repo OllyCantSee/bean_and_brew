@@ -10,6 +10,10 @@ if (!isset($_SESSION['user_id'])) {
     check_cookies($database_conn); // Checking if a user has remembered their account
 }
 
+if (!isset($_SESSION['book_table_error'])) {
+    $_SESSION['book_table_error'] = "Please fill out all of the fields";
+}
+
 if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
     $_COOKIE['theme'] = "light";
 }
@@ -21,29 +25,36 @@ if (isset($_POST['submit_booking'])) {
     $date_of_booking = $_POST['date_of_booking'];
     $time_of_booking = $_POST['time_of_booking'];
 
-    if (empty($restaurant_location) || empty($number_of_guests)
-    || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking) || ($restaurant_location == "") || ($number_of_guests  == "")
-    || $alergies_boolean  == "" || $date_of_booking  == "" || ($time_of_booking  == "")) {
+    $date_of_booking = strtotime($date_of_booking);
+    $date_of_booking = date('d-m-Y', $date_of_booking);
 
+    if (empty($restaurant_location) || empty($number_of_guests) || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking)) {
+        $_SESSION['book_table_error'] = "Please fill out all of the fields";
+    } elseif ($date_of_booking < date('d-m-Y')) {
+        $_SESSION['book_table_error'] = "Please choose a date in the future";
     } else {
         $query1 = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restaurant_location'";
         $result = mysqli_query($database_conn, $query1);
         $result_array = $result->fetch_array();
         $number_of_available_seats = $result_array['restaurant_seats'];
 
-        $total_seats_after_booking = (intval($number_of_available_seats)-intval($number_of_guests));
+        $total_seats_after_booking = (intval($number_of_available_seats) - intval($number_of_guests));
 
         if ($total_seats_after_booking < 0) {
             $_SESSION['booking_error'] = "Sorry, there is not enough room for that number of guests";
+            echo "<script> display_error_message() </script>";
         } else {
             $query2 = "UPDATE restaurant_seating SET restaurant_seats = $total_seats_after_booking
             WHERE restaurant_name = '$restaurant_location'";
             mysqli_query($database_conn, $query2);
-    
-            $date = date_create($date_of_booking);
-            $query3 = "INSERT INTO users_booking(number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
-            VALUES($number_of_guests, $alergies_boolean, $date_of_booking, $time_of_booking)";
+
+            $_SESSION['book_table_error'] = "";
+
+            $query3 = "INSERT INTO users_booking(booking_location, number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
+            VALUES('$restaurant_location', $number_of_guests, '$alergies_boolean', '$date_of_booking', $time_of_booking)";
             mysqli_query($database_conn, $query3);
+
+            header("Location: success_page.php?checkout_type=booking&date=" . $date_of_booking . "&time=" . $time_of_booking);
         }
     }
 
@@ -66,26 +77,26 @@ if (isset($_POST['submit_booking'])) {
 
     get_seats();
 
-function get_seats(selectedRestaurant) {
+    function get_seats(selectedRestaurant) {
 
-    if (document.getElementById('number_of_seats') == null || document.getElementById('number_of_seats') == "") {
-        selectedRestaurant = "Leeds";
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'get_seats.php?restaurant=' + selectedRestaurant, true);
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            document.getElementById('number_of_seats').innerText = xhr.responseText;
-            if (xhr.responseText == "0") {
-                document.getElementById('number_of_seats').innerText = "None"
-            }
+        if (document.getElementById('number_of_seats') == null || document.getElementById('number_of_seats') == "") {
+            selectedRestaurant = "Leeds";
         }
-    };
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'get_seats.php?restaurant=' + selectedRestaurant, true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById('number_of_seats').innerText = xhr.responseText;
+                if (xhr.responseText == "0") {
+                    document.getElementById('number_of_seats').innerText = "None"
+                }
+            }
+        };
 
 
-    xhr.send();
-}
+        xhr.send();
+    }
 
 
 </script>
@@ -100,7 +111,7 @@ function get_seats(selectedRestaurant) {
 
     <?php include_once "components/burger_nav.php"; ?>
 
-    
+
 
 
     <div class="page_container">
@@ -110,7 +121,7 @@ function get_seats(selectedRestaurant) {
                 <div class="column_one_top_box">
                     <h2 class="top_box_title">Seats available</h2>
                     <h1 class="top_box_main font_size_80" id="number_of_seats">
-                        
+
                     </h1>
                 </div>
 
@@ -127,8 +138,8 @@ function get_seats(selectedRestaurant) {
                         <h1 class="checkout_title">Where?</h1>
                     </div>
                     <form method="POST" class="checkout_form">
-                        <select name="restaurant" id="restaurant"
-                        class="checkout_input_long" onchange="get_seats(this.value)">
+                        <select name="restaurant" id="restaurant" class="checkout_input_long"
+                            onchange="get_seats(this.value)">
                             <option value="Leeds" selected="selected">Leeds</option>
                             <option value="Knaresborough">Knaresborough</option>
                             <option value="Harrogate">Harrogate</option>
@@ -155,10 +166,10 @@ function get_seats(selectedRestaurant) {
                         </select>
                         <select name="alergies_boolean" id="" class="checkout_input_long">
                             <option value="">Any allergies?</option>
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
-                        </div>
+                    </div>
                 </div>
 
                 <div class="personal_info_checkout">
@@ -167,7 +178,7 @@ function get_seats(selectedRestaurant) {
                     </div>
                     <div class="display_flex_column">
                         <input type="date" placeholder="Choose a date..." class="checkout_input_long"
-                            name="date_of_booking" maxlength="40">
+                            name="date_of_booking" maxlength="40" value="this.value">
                         <select name="time_of_booking" id="" class="checkout_input_long">
                             <option value="">Choose a time</option>
                             <option value="09.00">09.00</option>
@@ -194,9 +205,23 @@ function get_seats(selectedRestaurant) {
                         </select>
                         <input method="POST" type="submit" class="change_value_button" name="submit_booking"
                             value="Submit">
-                        </div>
-                        
-                </form>
+                    </div>
+
+                    </form>
+                    <?php
+                    if (empty($_SESSION['book_table_error'])) {
+                    } else {
+                        $form_error = $_SESSION['book_table_error'];
+                        echo "<div class='page_error' id='page_error'>
+                                <div class='page_error_content'>
+                                    $form_error
+                                </div>
+                        </div>";
+                    }
+
+                    ?>
+
+
                 </div>
             </div>
 
@@ -210,6 +235,7 @@ function get_seats(selectedRestaurant) {
 
     <script src="shopping_list.js"></script>
     <script src="burger.js"></script>
+    <script src="error_message.js"></script>
 
 </body>
 

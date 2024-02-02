@@ -1,5 +1,7 @@
 <?php
 
+    // ^^ = The line above is what I am talking about
+
     session_start();
 
     include_once "database_conn.php";
@@ -44,22 +46,27 @@
 
         }
         if (isset($_POST['submit_password_change']) && !empty($_POST['old_password'])
-        && !empty($_POST['new_password'])) {
+        && !empty($_POST['new_password'])) { // Ensuring that all inputs have been filled
+        // before attempting to run any more script
 
-            $password = $result_array['password'];
-            $password_salt = $result_array['password_salt'];
+            $password = $result_array['password']; // Getting the stored password
+            $password_salt = $result_array['password_salt']; // Getting the stored salt
 
             $old_password = santatize_input($_POST['old_password'], false);
-
+            // ^^Getting the old password from the user input
             if (password_verify($old_password . $password_salt, $password)) {
+                // ^^Checking if the user got their old password correct
                 $new_password = santatize_input($_POST['new_password'], false);
+                // ^^Getting and santatising the new password - Preventing SQL Injections
                 $new_password = password_hash($new_password . $password_salt, PASSWORD_BCRYPT);
+                // ^^Creating the encrypted version of the neww password
 
                 $template_query = "UPDATE users SET password = ? WHERE user_id = $user_id";
                 $statement = $database_conn->prepare($template_query);
                 $statement->bind_param("s", $new_password);
                 $statement->execute();
                 $statement->close();
+                // ^^Initialising the query that adds the new password to the 
                 header("Location: settings.php");
             }
 
