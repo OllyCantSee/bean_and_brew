@@ -51,8 +51,6 @@
                 $statement->execute();
                 $statement->close();
                 $_SESSION['item_basket'] = [];
-
-                header("Location: success_page.php?checkout_type=preorder&date=" . $date);
     
 
             }

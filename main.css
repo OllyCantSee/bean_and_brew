@@ -202,7 +202,7 @@ body.dark {
     z-index: 10;
 }
 
-@media only screen and (max-width: 1474px) {
+@media only screen and (max-width: 1383px) {
     .nav_bar {
         padding: 1.5rem 4.6875rem;
     }
@@ -401,7 +401,7 @@ body.dark {
     cursor: pointer;
 }
 
-@media only screen and (max-width: 1306px) {
+@media only screen and (max-width: 1134px) {
     .home_title {
         font-size: 6rem;
         margin-top: 30px;
@@ -853,7 +853,7 @@ body.dark .menu_item_left {
     font-weight: 600;
 }
 
-@media only screen and (max-width: 1306px) {
+@media only screen and (max-width: 1134px) {
     .basket_container {
         display: none;
     }
@@ -938,12 +938,12 @@ body.dark .menu_item_left {
     border-radius: 0 0 30px 30px;
 }
 
-@media only screen and (min-width: 1306px) {
+@media only screen and (min-width: 1134px) {
     .burger_nav_bar {
         display: none;
     }
 }
-@media only screen and (max-width: 1306px) {
+@media only screen and (max-width: 1134px) {
     .settings_container svg {
         display: none;
     }
@@ -1222,7 +1222,7 @@ body.dark input[type="date"] {
 @media only screen and (max-width: 1126px) {
     .small_background_container {
         flex-direction: column;
-        width: 100%;
+        width: max-content;
         height: max-content;
     }
     .page_container {
@@ -1246,12 +1246,6 @@ body.dark input[type="date"] {
     }
     .top_box_main {
        padding: 0rem 1rem;
-    }
-}
-
-@media only screen and (max-width: 830px) {
-    .small_background_container {
-        min-width: 500px
     }
 }
 
@@ -1450,7 +1444,7 @@ body.dark input[type="date"] {
     padding-left: 1.2rem;
     transition: all 0.2s ease;
     margin-top: 30px;
-    text-align: center;
+
 }
 
 .page_error_content {
@@ -1465,42 +1459,7 @@ body.dark input[type="date"] {
 }
 
 
-/*-------------------- Success Page CSS --------------------*/
-
-
-.success_container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    justify-content: center;
-}
-
-.success_header {
-    font-family: var(--koulen-font);
-    color: var(--nav-text-color);
-    font-size: 6rem;
-}
-
-.success_subheader {
-    margin-top: 20px;
-    margin-bottom: 30px;
-    color: var(--nav-text-color);
-    font-size: 2rem;
-}
-
-.success_leave_button {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background: var(--nav-text-color);
-    color: invert(var(--nav-text-color), 100%);
-    font-weight: 700;
-    border-radius: 12px;
-    margin-top: 40px
-}
-
-
-/*-------------------- Utility Classes CSS --------------------*/
+/* Utility Classes - These are classes that I may need to use more than once to improve efficieny */
 
 .text_decoration_none {
     text-decoration: none;
@@ -1599,4 +1558,8 @@ option {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.page_error_show {
+    transform: translateX(0);
 }

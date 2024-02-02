@@ -25,12 +25,17 @@ if (isset($_POST['submit_booking'])) {
     $date_of_booking = $_POST['date_of_booking'];
     $time_of_booking = $_POST['time_of_booking'];
 
-    $date_of_booking = strtotime($date_of_booking);
-    $date_of_booking = date('d-m-Y', $date_of_booking);
+    $time_of_booking = strtotime($time_of_booking);
+    $time_of_booking = date('Y-m-d', $time_of_booking);
 
-    if (empty($restaurant_location) || empty($number_of_guests) || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking)) {
+
+
+    if (
+        empty($restaurant_location) || empty($number_of_guests)
+        || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking)
+    ) {
         $_SESSION['book_table_error'] = "Please fill out all of the fields";
-    } elseif ($date_of_booking < date('d-m-Y')) {
+    } else if ($time_of_booking < date('Y-m-d')) {
         $_SESSION['book_table_error'] = "Please choose a date in the future";
     } else {
         $query1 = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restaurant_location'";
@@ -50,11 +55,9 @@ if (isset($_POST['submit_booking'])) {
 
             $_SESSION['book_table_error'] = "";
 
-            $query3 = "INSERT INTO users_booking(booking_location, number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
-            VALUES('$restaurant_location', $number_of_guests, '$alergies_boolean', '$date_of_booking', $time_of_booking)";
+            $query3 = "INSERT INTO users_booking(booking_location,number_of_guests, allergies_boolean, date_of_booking, time_of_booking)
+            VALUES('$restaurant_location', $number_of_guests, $alergies_boolean, $date_of_booking, $time_of_booking)";
             mysqli_query($database_conn, $query3);
-
-            header("Location: success_page.php?checkout_type=booking&date=" . $date_of_booking . "&time=" . $time_of_booking);
         }
     }
 
@@ -166,8 +169,8 @@ if (isset($_POST['submit_booking'])) {
                         </select>
                         <select name="alergies_boolean" id="" class="checkout_input_long">
                             <option value="">Any allergies?</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
                         </select>
                     </div>
                 </div>
@@ -178,7 +181,7 @@ if (isset($_POST['submit_booking'])) {
                     </div>
                     <div class="display_flex_column">
                         <input type="date" placeholder="Choose a date..." class="checkout_input_long"
-                            name="date_of_booking" maxlength="40" value="this.value">
+                            name="date_of_booking" maxlength="40">
                         <select name="time_of_booking" id="" class="checkout_input_long">
                             <option value="">Choose a time</option>
                             <option value="09.00">09.00</option>
@@ -208,9 +211,8 @@ if (isset($_POST['submit_booking'])) {
                     </div>
 
                     </form>
-                    <?php
-                    if (empty($_SESSION['book_table_error'])) {
-                    } else {
+                    <?php 
+                    if (isset($_SESSION['book_table_error']) || $_SESSION['book_table_error'] != "") {
                         $form_error = $_SESSION['book_table_error'];
                         echo "<div class='page_error' id='page_error'>
                                 <div class='page_error_content'>
