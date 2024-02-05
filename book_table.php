@@ -19,8 +19,8 @@ if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
 }
 
 if (isset($_POST['submit_booking'])) {
-    $restaurant_location = $_POST['restaurant'];
-    $number_of_guests = $_POST['number_of_guests'];
+    $restaurant_location = santatize_input($_POST['restaurant'], false);
+    $number_of_guests = santatize_input($_POST['number_of_guests'], false);
     $alergies_boolean = $_POST['alergies_boolean'];
     $date_of_booking = $_POST['date_of_booking'];
     $time_of_booking = $_POST['time_of_booking'];
@@ -178,7 +178,7 @@ if (isset($_POST['submit_booking'])) {
                     </div>
                     <div class="display_flex_column">
                         <input type="date" placeholder="Choose a date..." class="checkout_input_long"
-                            name="date_of_booking" maxlength="40" value="this.value">
+                            name="date_of_booking" min="<?=date("Y-m-d")?>" maxlength="40" value="this.value">
                         <select name="time_of_booking" id="" class="checkout_input_long">
                             <option value="">Choose a time</option>
                             <option value="09.00">09.00</option>
@@ -205,10 +205,7 @@ if (isset($_POST['submit_booking'])) {
                         </select>
                         <input method="POST" type="submit" class="change_value_button" name="submit_booking"
                             value="Submit">
-                    </div>
-
-                    </form>
-                    <?php
+                            <?php
                     if (empty($_SESSION['book_table_error'])) {
                     } else {
                         $form_error = $_SESSION['book_table_error'];
@@ -220,6 +217,9 @@ if (isset($_POST['submit_booking'])) {
                     }
 
                     ?>
+                    </div>
+
+                    </form>
 
 
                 </div>

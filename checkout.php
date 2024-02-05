@@ -24,8 +24,10 @@
 
         if(isset($_POST['pre_order'])) {
 
-            if(!empty($_POST['full_name_checkout']) && !empty($_POST['email_address']) && !empty($_POST['date'])) {
-
+            if(!empty($_POST['full_name_checkout']) && !empty($_POST['email_address']) && !empty($_POST['date'])
+            && !empty($_POST['card_number']) && !empty($_POST['card_name']  && !empty($_POST['expiration_date'])
+            && !empty($_POST['security_code']))) {
+                $_SESSION['checkout_error'] = "";
                 $full_name = santatize_input($_POST['full_name_checkout'], true);
                 $email_address = santatize_input($_POST['email_address'], true);
                 $items = json_encode($_SESSION['item_basket']);
@@ -58,6 +60,8 @@
             }
         
 
+        } else {
+            $_SESSION['checkout_error'] = "Please ensure all of the inputs have been filled";
         }
 
         
@@ -160,6 +164,19 @@
                     </div>
                 </div>
 
+                <?php
+                    if (empty($_SESSION['checkout_error'])) {
+                    } else {
+                        $form_error = $_SESSION['checkout_error'];
+                        echo "<div class='page_error' id='page_error'>
+                                <div class='page_error_content'>
+                                    $form_error
+                                </div>
+                        </div>";
+                    }
+
+                ?>
+
             </div>
 
             <div class="column_two">
@@ -193,7 +210,7 @@
                     <div class="item_title_container">
                         <h1 class="checkout_title">When?</h1>
                     </div>
-                        <input type="date" class="checkout_input_long" name="date">
+                        <input type="date" class="checkout_input_long" name="date" min="<?=date("Y-m-d")?>">
                         <input type="submit" value="Pre-Order Now" name="pre_order" class="checkout_form_button">
                     </form>
                 </div>
