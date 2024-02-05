@@ -146,6 +146,17 @@
                             </form>
                         </div>
                     </div>
+                    <div class="quick_action grey_background">
+                    <div class="sign_out_overlay" id="view_bookings_button"></div>
+                        <div class="item_title_container">
+                            <h1 class="quick_action_title">View Bookings</h1>
+                        </div>
+                    </div>
+                    <div class="quick_action grey_background">
+                        <div class="item_title_container">
+                            <h1 class="quick_action_title">View Pre-Orders</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -200,6 +211,7 @@
 <script src="change_details.js"></script>
 <script src="theme.js"></script>
 <script src="font_size_switch.js"></script>
+<script src="view_bookings.js"></script>
 
     
 </body>
