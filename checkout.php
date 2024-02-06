@@ -28,7 +28,7 @@
             && !empty($_POST['card_number']) && !empty($_POST['card_name']  && !empty($_POST['expiration_date'])
             && !empty($_POST['security_code']))) {
                 $_SESSION['checkout_error'] = "";
-                $full_name = santatize_input($_POST['full_name_checkout'], true);
+                $full_name = santatize_input_no_spaces($_POST['full_name_checkout'], false);
                 $email_address = santatize_input($_POST['email_address'], true);
                 $items = json_encode($_SESSION['item_basket']);
                 $total_price = 0;
@@ -45,11 +45,12 @@
     
     
                 $date = $_POST['date'];
+                $user_id = $_SESSION['user_id'];
                 
                 $template_query = "INSERT INTO user_pre_order(pre_order_items, pre_order_price, pre_order_date,
-                pre_order_full_name, pre_order_email) VALUES (?,?,?,?,?)";
+                pre_order_full_name, pre_order_email, user_id) VALUES (?,?,?,?,?,?)";
                 $statement = $database_conn->prepare($template_query);
-                $statement->bind_param("sssss", $items, $total_price, $date, $full_name, $email_address);
+                $statement->bind_param("ssssss", $items, $total_price, $date, $full_name, $email_address, $user_id);
                 $statement->execute();
                 $statement->close();
                 $_SESSION['item_basket'] = [];

@@ -27,11 +27,12 @@ body.large_fonts {
 
 :root {
     --text-color: #ebebeb;
+    --darker-text-color: #696969;
     --box-color: #5B4E44;
     --box-gradient-color: #877D76;
 
     --page-background-color: #f2f2f2;
-    --page-background-gradient: #f0f0f0;
+    --page-background-gradient: #ffffff;
 
     --form-border-radius: 22px;
     --form-font-size: 0.95rem;
@@ -68,6 +69,8 @@ body.dark {
     --box-background-2: #272727;
     --box-background-accent: #313131;
     --box-background-accent-lighter: #3d3d3d;
+    --page-background-gradient: #444444;
+    --darker-text-color: #cacaca;
 }
 
 
@@ -1324,6 +1327,7 @@ body.dark input[type="date"] {
     height: 100%;
 }
 
+
 .change_value_button {
     width: auto;
     height: max-content;
@@ -1499,6 +1503,134 @@ body.dark input[type="date"] {
 }
 
 
+/*-------------------- Booking Display On Settings Page --------------------*/
+
+.history_container {
+    width: 100%;
+    max-height: 640px;
+}
+.history_scroll_section {
+    display: flex;
+    flex-direction: column;
+    overflow-Y: scroll;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+    padding-right: 1rem;
+}
+
+.history_section_title {
+    font-size: 50px;
+    font-weight: 800;
+    margin-bottom: 30px;
+    color: var(--nav-text-color);
+}
+
+.history_item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--page-background-gradient);
+    border-radius: 24px;
+    padding: 10px;
+    padding-left: 20px;
+    position: relative;
+    justify-content: center;
+}
+
+.history_section_title {
+    font-weight: 800;
+    font-size: 37px;
+    color: var(--nav-text-color);
+}
+.booking_date {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--darker-text-color);
+}
+.time_section {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 8px;
+    height: auto;
+    background: var(--box-background-accent-lighter);
+    border-radius: 20px;
+    width: 200px;
+    height: 150px
+}
+
+.price_section {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 8px;
+    height: auto;
+    background: #2979FF;
+    border-radius: 20px;
+    width: 200px;
+    height: 230px;
+    color: #fff;
+}
+
+.booking_time {
+    color: var(--nav-text-color);
+    font-size: 30px;
+    font-weight: 800;
+}
+.total_price {
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.booking_bottom {
+    margin-top: 30px;
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: row;
+}
+
+.booked_for_text {
+    font-weight: 800;
+    font-size: 26px;
+    color: var(--darker-text-color);
+}
+
+.booking_for_number {
+    font-size: 22px;
+    background: #2979FF;
+    color: #fff;
+    width: 35px;
+    height: 35px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item_list {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: scroll;
+    margin-top: 15px;
+    width: 330px;
+}
+
+.small_history_image {
+    object-fit: cover;
+    background-size: contain;
+    image-rendering: crisp-edges;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+}
+
+
+
+
 /*-------------------- Utility Classes CSS --------------------*/
 
 .text_decoration_none {
@@ -1592,6 +1724,10 @@ body.dark input[type="date"] {
 
 option {
     background-color: var(--nav-background)
+}
+
+.display_flex {
+    display: flex;
 }
 
 .display_flex_column {

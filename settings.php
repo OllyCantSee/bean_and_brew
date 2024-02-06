@@ -149,19 +149,20 @@
                     <div class="quick_action grey_background">
                     <div class="sign_out_overlay" id="view_bookings_button"></div>
                         <div class="item_title_container">
-                            <h1 class="quick_action_title">View Bookings</h1>
+                            <h1 class="quick_action_title" id="view_bookings_button_text">View Bookings</h1>
                         </div>
                     </div>
                     <div class="quick_action grey_background">
+                    <div class="sign_out_overlay" id="view_orders_button"></div>
                         <div class="item_title_container">
-                            <h1 class="quick_action_title">View Pre-Orders</h1>
+                            <h1 class="quick_action_title" id="view_orders_button_text">View Orders</h1>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="column_two">
-                <div class="personal_info_checkout">
+                <div class="personal_info_checkout" id="container_one">
                         <div class="item_title_container">
                             <h1 class="checkout_title">Your Info</h1>
                         </div>
@@ -178,7 +179,7 @@
                     </div>
 
 
-                    <div class="accessibility_section">
+                    <div class="accessibility_section" id="container_two">
                         <div class="item_title_container">
                             <h1 class="checkout_title">Accessibility</h1>
                         </div>
@@ -196,6 +197,94 @@
                         </form>
                     </div>
 
+                    <div class="history_container display_none" id="booking_history_container">
+                        <div class="history_section_title">Booking History</div>
+                        <div class="history_scroll_section">
+                            
+                            <?php
+                                $user_id = $_SESSION['user_id'];
+                                $query = "SELECT * FROM users_booking WHERE user_id = $user_id";
+                                $result = mysqli_query($database_conn, $query);
+
+                                while ($item = mysqli_fetch_assoc($result)) {
+                                    $location = $item['booking_location'];
+                                    $date = $item['date_of_booking'];
+                                    $number_of_guests = $item['number_of_guests'];
+                                    $time_of_booking = $item['time_of_booking'];
+
+                                    if ($time_of_booking < 12.00) {
+                                        $hour = "am";
+                                    } else {
+                                        $hour = "pm";
+                                    }
+                                
+                                    echo '<div class="history_item">
+                                    <div class="booking_top">
+                                        <h1 class="booking_title">' . $location . '</h1>
+                                        <h1 class="booking_date">' . $date  . '</h1>
+                                    </div>
+                                    <div class="booking_bottom">
+                                        <h1 class="booked_for_text">Booked for</h1>
+                                        <h1 class="booking_for_number">' . $number_of_guests . '</h1>
+                                    </div>
+                                    <div class="time_section">
+                                        <h1 class="booking_time">' . $time_of_booking . $hour . '</h1>
+                                    </div>
+                                </div>';
+                                }
+
+                            ?>
+
+                        </div>
+                    </div>
+
+                    <div class="history_container display_none" id="order_history_container">
+                        <div class="history_section_title">Pre-Order History</div>
+                        <div class="history_scroll_section">
+                            <?php
+                                    $user_id = $_SESSION['user_id'];
+                                    $query = "SELECT * FROM user_pre_order WHERE user_id = $user_id";
+                                    $result = mysqli_query($database_conn, $query);
+
+                                    while ($item = mysqli_fetch_assoc($result)) {
+                                        $ordered_items = $item['pre_order_items'];
+                                        $ordered_items = json_decode($ordered_items);
+                                        $pre_order_date = $item['pre_order_date'];
+                                        $pre_order_full_name = $item['pre_order_full_name'];
+                                        $total_price = $item['pre_order_price'];
+                                    
+                                        echo '<div class="history_item">
+                                        <div class="booking_top">
+                                            <h1 class="booking_title">' . "Knaresborough" . '</h1>
+                                            <h1 class="booking_date">' . $pre_order_date  . '</h1>
+                                        </div>
+                                        <div class="booking_bottom">
+                                            <h1 class="booked_for_text">' . $pre_order_full_name .'</h1>
+                                        </div>
+                                        <div class="price_section">
+                                            <h1 class="total_price">' . "£" . $total_price . '</h1>
+                                        </div>
+                                        <div class="item_list">';
+                                         
+                                        foreach ($ordered_items as $item) {
+                                            $item = intval($item);
+                                            $query = "SELECT * FROM menu WHERE item_id = $item";
+                                            $items_result = mysqli_query($database_conn, $query);
+                                            
+                                            while ($menu_item = mysqli_fetch_assoc($items_result)) {
+                                                $menu_item_image = $menu_item['item_image'];
+                                                echo '<img class="small_history_image" src="'  . $menu_item_image . '" alt="">';
+                                            }
+
+                                            
+                                        }
+                                        
+                                        echo '</div>
+                                    </div>';
+                                    }
+                            ?>
+                        </div>
+                    </div>
 
             </div>
 
