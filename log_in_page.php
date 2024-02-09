@@ -94,7 +94,7 @@
 
 
     <section class="form_section">
-        <h1 class="form_error"><?php echo $_SESSION['log_in_error'] ?></h1>
+    <?php if(!empty($_SESSION['log_in_error'])) {echo '<h1 class="form_error">' . $_SESSION['log_in_error'] . '</h1>';}?>
         <form method="POST" class="entry_form"> <!-- Creating a form where I can create the inputs -->
         <div class="form_title_container"> <!-- This is usually not needed but the font we are using is strange.. -->
             <h1 class="form_title light_text">Log In</h1>

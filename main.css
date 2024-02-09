@@ -94,6 +94,16 @@ body.dark {
     gap: 1rem;
 }
 
+.form_error {
+    width: 400px;
+    padding: 1rem;
+    background: #ED5950;
+    color: #fff;
+    border-radius: 18px;
+    text-align: center;
+    font-size: 1rem;
+}
+
 .entry_form {
     padding: 1.6rem;
     width: 400px;
@@ -1454,6 +1464,7 @@ body.dark input[type="date"] {
     padding-left: 1.2rem;
     transition: all 0.2s ease;
     text-align: center;
+    z-index: 2;
 }
 
 .page_error_content {
@@ -1597,6 +1608,10 @@ body.dark input[type="date"] {
     font-weight: 800;
     font-size: 26px;
     color: var(--darker-text-color);
+}
+
+.booking_title {
+    color: var(--nav-text-color);
 }
 
 .booking_for_number {

@@ -19,6 +19,11 @@ if (!isset($_COOKIE['theme'])) { // Creating the cookies if they are not set
 }
 
 if (isset($_POST['submit_booking'])) {
+    if(!isset($_SESSION['user_id'])) {
+        header("Location: sign_up_page.php");
+        $_SESSION['form_error'] = "Please create an account before booking a table";
+    }
+
     $restaurant_location = santatize_input($_POST['restaurant'], false);
     $number_of_guests = santatize_input($_POST['number_of_guests'], false);
     $alergies_boolean = $_POST['alergies_boolean'];
