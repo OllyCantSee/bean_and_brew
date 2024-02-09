@@ -14,8 +14,10 @@
         $_COOKIE['theme'] = "light";
     }
 
+    if (!isset($_SESSION['checkout_error'])) {
+        $_SESSION['checkout_error'] = "";
+    }
 
-    if (isset($_SESSION['user_id'])) {
 
         if (!isset($_SESSION['item_basket'])) {
             $_SESSION['item_basket'] = [];
@@ -23,10 +25,17 @@
         }
 
         if(isset($_POST['pre_order'])) {
-
+            
             if(!empty($_POST['full_name_checkout']) && !empty($_POST['email_address']) && !empty($_POST['date'])
             && !empty($_POST['card_number']) && !empty($_POST['card_name']  && !empty($_POST['expiration_date'])
             && !empty($_POST['security_code']))) {
+
+                if(!isset($_SESSION['user_id'])) {
+                    header("Location: sign_up_page.php");
+                    $_SESSION['form_error'] = "Please create an account before purchasing any items";
+                }
+    
+
                 $_SESSION['checkout_error'] = "";
                 $full_name = santatize_input_no_spaces($_POST['full_name_checkout'], false);
                 $email_address = santatize_input($_POST['email_address'], true);
@@ -58,16 +67,13 @@
                 header("Location: success_page.php?checkout_type=preorder&date=" . $date);
     
 
+            } else {
+                $_SESSION['checkout_error'] = "Please ensure all of the inputs have been filled";
             }
-        
-
-        } else {
-            $_SESSION['checkout_error'] = "Please ensure all of the inputs have been filled";
         }
 
         
 
-    }
 
 ?>
 
@@ -166,15 +172,12 @@
                 </div>
 
                 <?php
-                    if (empty($_SESSION['checkout_error'])) {
-                    } else {
                         $form_error = $_SESSION['checkout_error'];
                         echo "<div class='page_error' id='page_error'>
                                 <div class='page_error_content'>
                                     $form_error
                                 </div>
                         </div>";
-                    }
 
                 ?>
 
