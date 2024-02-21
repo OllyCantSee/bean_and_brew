@@ -476,6 +476,20 @@ body.dark {
     border-radius: 30px;
     display: flex;
     align-items: center;
+    position: relative;
+}
+
+.items_filter {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid #868686;
+    margin-left: auto;
+}
+
+.items_filter_select {
+    background: transparent;
+    border: none;
+    color: var(--nav-text-color);
 }
 
 .search_icon {

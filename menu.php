@@ -4,6 +4,8 @@
     include_once "database_conn.php";
     include_once "validation_functions/validation.php";
     include_once "check_login_cookies.php";
+
+    if(!isset($_COOKIE['changeitem'])) { setcookie('changeitem', 0); header("Location: menu.php"); }
     
     if (!isset($_SESSION['user_id'])) {
         check_cookies($database_conn);
@@ -40,6 +42,31 @@
 
     
 </head>
+
+<script>
+
+    function changeItems(selectedValue) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'change_item.php?item=' + selectedValue, true);
+        
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                document.cookie = "changeitem=" + xhr.responseText;
+                console.log(xhr.responseText);
+                location.reload();
+            } else {
+                console.error('Request failed with status ' + xhr.status);
+            }
+        };
+
+        xhr.send();
+
+    }
+
+
+
+</script>
+
 <body <?php if ($_COOKIE['theme'] == "dark" && isset($_SESSION['user_id'])) {echo "class='dark'";} ?> id="menu_page">
         
     <?php include_once "components/top_navigation_bar.php"; ?>
@@ -50,6 +77,8 @@
 
     <section class="menu_container">
         <div class="search_filter">
+
+
             <div class="search_bar">
                 <input type="text" class="search_bar_outline" placeholder="Search for anything...">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="30"
@@ -59,22 +88,28 @@
                 </svg>
             </div>
 
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="34"
-            viewBox="0 0 36 34" fill="none" class="filter_icon">
-                <line y1="5.34375" x2="35.0625" y2="5.34375" stroke="#868686"/>
-                <line y1="17.0312" x2="35.0625" y2="17.0312" stroke="#868686"/>
-                <line y1="28.7188" x2="35.0625" y2="28.7188" stroke="#868686"/>
-                <circle cx="22.3125" cy="5.3125" r="4.8125" fill="#F8F8F8" stroke="#868686"/>
-                <circle cx="9.5625" cy="17" r="4.8125" fill="#F8F8F8" stroke="#868686"/>
-                <circle cx="22.3125" cy="28.6875" r="4.8125" fill="#F8F8F8" stroke="#868686"/>
-            </svg>
+            <div class="items_filter">
+                    <form action="" method="post" class="items_filter_form">
+                    <select name="item_choice" id="" class="items_filter_select" onchange="changeItems(this.value)">
+                        <option value="0" <?php echo ($_COOKIE['changeitem'] == '0') ? 'selected' : ''; ?>>Cafe Items</option>
+                        <option value="1" <?php echo ($_COOKIE['changeitem'] == '1') ? 'selected' : ''; ?>>Coffee</option>
+                    </select>
+
+                    </form>
+            </div>
         </div>
 
         <div class="menu_items_container">
             <div class="menu_items_grid">
             <?php
-            
-                $query = "SELECT * FROM menu";
+
+                if (isset($_COOKIE['changeitem']) && $_COOKIE['changeitem'] == 1) {
+                    $query = "SELECT * FROM menu WHERE is_coffee = 1";
+                } else {
+                    $query = "SELECT * FROM menu WHERE is_coffee = 0";
+                }
+
+                
                 $result = mysqli_query($database_conn, $query) or
                 die("Could not connect: " . mysqli_error($database_conn));
 

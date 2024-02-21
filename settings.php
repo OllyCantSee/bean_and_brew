@@ -178,7 +178,7 @@
                         </form>
                     </div>
 
-
+    
                     <div class="accessibility_section" id="container_two">
                         <div class="item_title_container">
                             <h1 class="checkout_title">Accessibility</h1>
@@ -189,10 +189,6 @@
                                     <?php if ($_COOKIE['theme'] == "dark") {echo "Dark Mode";}
                                     else {echo "Light Mode";} ?></h1>
                                 <h1 class="settings_display_label">Theme</h1>
-                            </div>
-                            <div class="settings_text_box" id="change_fonts">
-                                <h1 class="settings_display"></h1>
-                                <h1 class="settings_display_label">Font Size</h1>
                             </div>
                         </form>
                     </div>

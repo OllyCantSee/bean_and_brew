@@ -5,7 +5,6 @@
 
         <div class="nav_links">
         <a href="support.php" class="text_decoration_none">Support</a>
-            <a href="hampers.php" class="text_decoration_none">Hampers</a>
             <a href="baking_lessons.php" class="text_decoration_none">Baking Lessons</a>
             <a href="book_table.php" class="text_decoration_none">Book a space</a>
             <a href="checkout.php" class="text_decoration_none">Checkout</a>

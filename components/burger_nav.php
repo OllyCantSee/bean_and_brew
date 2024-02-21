@@ -7,7 +7,6 @@
             <a href="baking_lessons.php" class="text_decoration_none burger_text">Baking Lessons</a>
             <a href="support.php" class="text_decoration_none burger_text">Support</a>
             <a href="book_table.php" class="text_decoration_none burger_text">Book a space</a>
-            <a href="hampers.php" class="text_decoration_none burger_text">Hampers</a>
             <a href="settings.php" class="text_decoration_none burger_text">Settings</a>
             <a href="checkout.php" class="text_decoration_none burger_text">Checkout</a>
         </div>
