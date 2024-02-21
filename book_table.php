@@ -32,7 +32,7 @@ if (isset($_POST['submit_booking'])) {
 
     if (empty($restaurant_location) || empty($number_of_guests) || empty($alergies_boolean) || empty($date_of_booking) || empty($time_of_booking)) {
         $_SESSION['book_table_error'] = "Please fill out all of the fields";
-    } elseif ($date_of_booking < date('d-m-Y')) {
+    } elseif ($date_of_booking < date('Y-m-d')) {
         $_SESSION['book_table_error'] = "Please choose a date in the future";
     } else {
         $query1 = "SELECT * FROM restaurant_seating WHERE restaurant_name = '$restaurant_location'";
@@ -68,6 +68,7 @@ if (isset($_POST['submit_booking'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -107,6 +108,7 @@ if (isset($_POST['submit_booking'])) {
 <body <?php if ($_COOKIE['theme'] == "dark" && isset($_SESSION['user_id'])) {
     echo "class='dark'";
 } ?>>
+    
 
     <?php include_once "components/top_navigation_bar.php"; ?>
 
