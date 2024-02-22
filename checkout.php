@@ -163,7 +163,7 @@
                                     </div>
 
                                 </div>';
-
+                                
                             }
                             ?>
 
@@ -217,6 +217,7 @@
                         <input type="date" class="checkout_input_long" name="date" min="<?=date("Y-m-d")?>">
                         <input type="submit" value="Pre-Order Now" name="pre_order" class="checkout_form_button">
                     </form>
+                    <a href="sign_up_page.php" class="text_decoration"><h1 class="form_reminder">Please make an account before purchasing</h1></a>
                 </div>
             </div>
         </div>

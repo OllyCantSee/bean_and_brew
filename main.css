@@ -869,6 +869,13 @@ body.dark .menu_item_left {
     gap: 0.2rem;
 }
 
+.form_reminder {
+    color: #b0b0b0;
+    font-size: 20px;
+    margin-top: -10px;
+    text-align: center;
+}
+
 .checkout_button {
     outline: none;
     border: none;

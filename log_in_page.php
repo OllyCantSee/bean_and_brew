@@ -19,7 +19,7 @@
     }
 
     if (isset($_SESSION['user_id'])) {
-        header ("Location: logged_in.php");
+        header ("Location: home_page.php");
     } else {
         if (empty($_SESSION['save_login_inputs'])) {
             $_SESSION['save_login_inputs'] = "";
