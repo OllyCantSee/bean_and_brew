@@ -871,9 +871,10 @@ body.dark .menu_item_left {
 
 .form_reminder {
     color: #b0b0b0;
-    font-size: 20px;
+    font-size: 18px;
     margin-top: -10px;
     text-align: center;
+    font-weight: 400;
 }
 
 .checkout_button {

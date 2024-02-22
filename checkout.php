@@ -192,7 +192,23 @@
                         <input type="text" placeholder="Full Name..."
                         class="checkout_input_long" name="full_name_checkout" maxlength="40">
                         <input type="email" placeholder="Email Adress..."
-                        class="checkout_input_long" name="email_address" maxlength="60">
+                        class="checkout_input_long" name="email_address" maxlength="60"
+                        value="<?php 
+                        
+                            if (isset($_SESSION['user_id'])) {
+                                $user_id = $_SESSION['user_id'];
+                                $statement = "SELECT * FROM users WHERE user_id = ?";
+                                $statement = $database_conn->prepare($statement);
+                                $statement->bind_param("s", $user_id);
+                                $statement->execute();
+                                $statement_result = $statement->get_result();
+                                $statement_array = $statement_result->fetch_array();
+
+                                $email = $statement_array['email'];
+                                echo $email;
+                            }
+                        
+                        ?>">
                 </div>
 
                 <div class="payment_checkout">
